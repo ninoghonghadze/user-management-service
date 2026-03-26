@@ -1,1 +1,1 @@
-# innowise-user-management
+user-management service
