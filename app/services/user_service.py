@@ -13,7 +13,7 @@ async def create_user(db: AsyncSession, user_data: UserCreate):
         username=user_data.username,
         email=user_data.email,
         password_hash=hash_password(user_data.password),)
-
+        
     db.add(user)
     await db.commit()
     await db.refresh(user)
