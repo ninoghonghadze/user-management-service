@@ -1,9 +1,12 @@
 from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
+
 from app.api.auth import router as auth_router
-from app.api.users import router as users_router
 from app.api.groups import router as groups_router
+from app.api.users import router as users_router
 from app.core.logger import logger
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -24,6 +27,7 @@ async def root():
 async def healthcheck():
     logger.info("Health check called")
     return {"status": "ok"}
+
 
 app.include_router(auth_router)
 app.include_router(users_router)

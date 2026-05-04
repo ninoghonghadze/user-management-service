@@ -1,17 +1,23 @@
 from datetime import datetime, timezone
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from jose import JWTError
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.core.security import create_access_token, create_refresh_token, decode_access_token, verify_password
+
+from app.core.security import (create_access_token, create_refresh_token,
+                               decode_access_token, verify_password)
 from app.db.session import get_db
-from app.schemas.auth import LoginRequest, PasswordResetRequest, RefreshRequest, TokenResponse
+from app.schemas.auth import (LoginRequest, PasswordResetRequest,
+                              RefreshRequest, TokenResponse)
 from app.schemas.user import UserCreate, UserResponse
 from app.services.rabbitmq_service import publish_password_reset
 from app.services.redis_service import blacklist_token, is_token_blacklisted
-from app.services.user_service import create_user, get_user_by_username, get_user_by_email, get_user_by_phone
+from app.services.user_service import (create_user, get_user_by_email,
+                                       get_user_by_phone, get_user_by_username)
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
+
 
 @router.post(
     "/signup", response_model=UserResponse, status_code=status.HTTP_201_CREATED

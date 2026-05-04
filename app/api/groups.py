@@ -1,11 +1,13 @@
 import uuid
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.api.users import get_current_user, require_admin
 from app.db.models.user import Group, User, UserRole
 from app.db.session import get_db
 from app.schemas.user import GroupCreate, GroupResponse
-from app.api.users import get_current_user, require_admin
 
 router = APIRouter(prefix="/groups", tags=["Groups"])
 
@@ -32,6 +34,7 @@ async def get_groups(
     # Only admin can list all groups
     result = await db.execute(select(Group))
     return result.scalars().all()
+
 
 @router.post("/{group_id}/users/{user_id}", response_model=GroupResponse)
 async def add_user_to_group(
